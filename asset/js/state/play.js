@@ -1,20 +1,44 @@
 function playState(game) {
+    let webspone;
+    let myplane;
+    let plane;
+    let cursors;
     this.init = function () {
 
     }
     this.preload = function () {
-        game.load.image('box1','asset/img/box1.png');
+        game.load.image('box1', 'asset/img/box1.png');
+        game.load.image('plane','asset/img/plane.png');
+        game.load.image('chunk','asset/img/chunk.png');
+        game.load.spritesheet('bomb','asset/img/xenon2_bomb.png',16,8,4);
     }
     this.create = function () {
-        var lz = ['box1'];
-        var em = game.add.emitter(300,300,20);
-        em.makeParticles(lz);
-        em.setXSpeed(-20,20);
-        em.setYSpeed(-20,20);
-        em.setScale(0.2, 0.5, 0.2, 0.5, 1000);
-        em.gravity=0;
-        //em.setAlpha(1,0.1,5000);
-        em.setRotation()
-        em.flow(1000, 500, 20, -1,false);
+        let my = new MyShow(game);
+        my.addSprite(100,100);
+
+        myplane = new MyPlane(game);
+        plane = myplane.addPlane(300,300);
+        plane.anchor.setTo(0.5,0.5);
+        //plane.rotation = -0.5*Math.PI;
+        game.physics.arcade.enable(plane);
+
+        webspone = myplane.addWeapon(plane);
+        game.input.onDown.add(function () {
+
+        });
+        cursors = this.input.keyboard.createCursorKeys();
+    }
+
+    this.update = function () {
+        //webspone.fireFrom.set(30,30);
+        webspone.fire();
+        if(cursors.right.isDown){
+            plane.body.angularVelocity = 300;
+        }else
+        if (cursors.left.isDown){
+            plane.body.angularVelocity = -300;
+        }else{
+            plane.body.angularVelocity = 0;
+        }
     }
 }
